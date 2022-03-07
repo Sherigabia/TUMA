@@ -28,67 +28,17 @@ class _HomeViewState extends State<HomeView> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark().copyWith(
-        appBarTheme: AppBarTheme(color: const Color(0xFF253341)),
+        appBarTheme: const AppBarTheme(color: Color(0xFF253341)),
         scaffoldBackgroundColor: const Color(0xFF15202B),
       ),
       themeMode: isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
       home: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.grey[50],
-          drawer: Drawer(
-            child: ListView(
-              children: [
-                DrawerHeader(
-                    margin: const EdgeInsets.all(0),
-                    padding: const EdgeInsets.all(0),
-                    child: Container(
-                      height: 500,
-                      padding: const EdgeInsets.all(30),
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image:
-                                  AssetImage("assets/images/background.jpeg"),
-                              fit: BoxFit.cover)),
-                      child: Column(children: [
-                        Container(
-                            height: 80,
-                            width: 80,
-                            child: const CircleAvatar(
-                                backgroundImage:
-                                    AssetImage("assets/images/delivery.jpeg"))),
-                        Container(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: const Text(
-                            "Sherigabia Pambo",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        )
-                      ]),
-                    )),
-                const ListTile(
-                  leading: Icon(Icons.person),
-                  title: Text("Profile"),
-                ),
-                const ListTile(
-                  leading: Icon(Icons.favorite),
-                  title: Text("Favorites"),
-                ),
-                const ListTile(
-                  leading: Icon(Icons.shopping_cart),
-                  title: Text("My Service Requests"),
-                  trailing: CircleAvatar(
-                    radius: 10,
-                    backgroundColor: Colors.red,
-                    child: Text(
-                      "6",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          drawer: SideNavigation(
+            imgUrl: "assets/images/delivery.jpeg",
+            username: "Pambo",
+            requestCount: 2,
           ),
           appBar: AppBar(
             backgroundColor: Colors.grey[50],
@@ -197,5 +147,74 @@ class _HomeViewState extends State<HomeView> {
     setState(() {
       this.isDarkModeEnabled = isDarkModeEnabled;
     });
+  }
+}
+
+class SideNavigation extends StatelessWidget {
+  String imgUrl;
+  String username;
+  int requestCount;
+
+  SideNavigation(
+      {Key? key,
+      required this.imgUrl,
+      required this.username,
+      required this.requestCount})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        children: [
+          DrawerHeader(
+              margin: const EdgeInsets.all(0),
+              padding: const EdgeInsets.all(0),
+              child: Container(
+                height: 500,
+                padding: const EdgeInsets.all(30),
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/background.jpeg"),
+                        fit: BoxFit.cover)),
+                child: Column(children: [
+                  Container(
+                      height: 80,
+                      width: 80,
+                      child: CircleAvatar(backgroundImage: AssetImage(imgUrl))),
+                  Container(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: Text(
+                      username,
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                ]),
+              )),
+          const ListTile(
+            leading: Icon(Icons.person),
+            title: Text("Profile"),
+          ),
+          const ListTile(
+            leading: Icon(Icons.favorite),
+            title: Text("Favorites"),
+          ),
+          ListTile(
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text("My Service Requests"),
+            trailing: CircleAvatar(
+              radius: 10,
+              backgroundColor: Colors.red,
+              child: Text(
+                "$requestCount",
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

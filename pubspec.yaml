@@ -45,13 +45,13 @@ dependencies:
   staggered_grid_view_flutter: ^0.0.4
   fullscreen: ^1.0.3
   flutter_paystack: ^1.0.5+1
+  flutterwave: ^1.0.1
 
 
 flutter_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/images/Tuma.jpg"
-
 
 dev_dependencies:
   flutter_test:

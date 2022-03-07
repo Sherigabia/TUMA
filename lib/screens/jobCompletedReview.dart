@@ -1,47 +1,24 @@
-import 'dart:async';
-import 'dart:io';
-import 'dart:math';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutterwave/flutterwave.dart';
 import 'package:flutterwave/models/responses/charge_response.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tuma/Payment/payment_page.dart';
-import 'package:tuma/screens/jobCompleted.dart';
 
-class CheckOutScreen extends StatefulWidget {
-  const CheckOutScreen({Key? key}) : super(key: key);
+class JobReviewScreen extends StatefulWidget {
+  const JobReviewScreen({Key? key}) : super(key: key);
 
   @override
-  _CheckOutScreenState createState() => _CheckOutScreenState();
+  _JobReviewScreenState createState() => _JobReviewScreenState();
 }
 
-class _CheckOutScreenState extends State<CheckOutScreen>
+class _JobReviewScreenState extends State<JobReviewScreen>
     with SingleTickerProviderStateMixin {
   bool processing = false;
   String? _ref;
   late AnimationController controller;
 
-  final String currency = FlutterwaveCurrency.GHS;
-  final String amount = "200";
-  void setRef() {
-    Random rand = Random();
-    int number = rand.nextInt(2000);
-    if (Platform.isAndroid) {
-      setState(() {
-        _ref = "AndroidRef1021799$number";
-      });
-    } else {
-      setState(() {
-        _ref = "IOSRef1021799$number";
-      });
-    }
-  }
-
   @override
   void initState() {
-    setRef();
     super.initState();
     controller =
         AnimationController(duration: const Duration(seconds: 3), vsync: this);
@@ -68,21 +45,21 @@ class _CheckOutScreenState extends State<CheckOutScreen>
                     controller: controller, onLoaded: (composition) {
                   controller.forward();
                 }),
-                Text(
-                  "Payment Successful",
+                const Text(
+                  "Job Completed",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: const [
                       Text(
-                        "An agent from TUMA",
+                        "Thank you for using our Service",
                         style: TextStyle(fontWeight: FontWeight.normal),
                       ),
                       Text(
-                        "Will get in touch with you shortly",
+                        "An agent will get in touch with you shortly",
                         style: TextStyle(fontWeight: FontWeight.normal),
                       ),
                     ],
@@ -94,30 +71,26 @@ class _CheckOutScreenState extends State<CheckOutScreen>
           ));
   @override
   Widget build(BuildContext context) {
-    final payButton = Material(
+    final completedButton = Material(
         elevation: 3,
-        color: const Color.fromRGBO(41, 205, 195, 1),
+        color: Color.fromRGBO(41, 205, 195, 1),
         borderRadius: BorderRadius.circular(5),
         child: MaterialButton(
             onPressed: () {
               showDoneDialog();
-              Timer(
-                  Duration(seconds: 4),
-                  () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => JobCompletedScreen())));
               //  makePayment(context);
             },
-            padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
+            padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
             minWidth: MediaQuery.of(context).size.width,
             child: processing == false
-                ? const Text("Make Payment",
+                ? const Text("Back to Service Page",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 25,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold))
                 : const CircularProgressIndicator(
-                    backgroundColor: Colors.greenAccent,
+                    backgroundColor: Colors.green,
                     semanticsLabel: 'Loading ..',
                   )));
 
@@ -125,7 +98,7 @@ class _CheckOutScreenState extends State<CheckOutScreen>
       appBar: AppBar(
         backgroundColor: Colors.orangeAccent,
         elevation: 0,
-        title: const Text("CheckOut"),
+        title: const Text("Confirm Job"),
         leading: Padding(
           padding: EdgeInsets.all(8.0),
           child: InkWell(
@@ -167,7 +140,7 @@ class _CheckOutScreenState extends State<CheckOutScreen>
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
-                  Text("Please Complete Service Request",
+                  Text("Job Completed Successfully",
                       style:
                           TextStyle(fontWeight: FontWeight.w500, fontSize: 18)),
                 ],
@@ -189,7 +162,7 @@ class _CheckOutScreenState extends State<CheckOutScreen>
                   ),
                   CircleAvatar(
                     radius: 25,
-                    backgroundColor: Colors.grey,
+                    backgroundColor: Colors.green,
                     child: Icon(
                       Icons.check,
                       color: Colors.white,
@@ -212,7 +185,8 @@ class _CheckOutScreenState extends State<CheckOutScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
                   Text("Make", style: TextStyle(fontWeight: FontWeight.w500)),
-                  Text("Complete", style: TextStyle(color: Colors.grey)),
+                  Text("Complete",
+                      style: TextStyle(fontWeight: FontWeight.w500)),
                   Text("Confirm", style: TextStyle(color: Colors.grey))
                 ],
               ),
@@ -223,7 +197,7 @@ class _CheckOutScreenState extends State<CheckOutScreen>
                       style: TextStyle(fontWeight: FontWeight.w500)),
                   Text(
                     "Service Payment",
-                    style: TextStyle(color: Colors.grey),
+                    style: TextStyle(fontWeight: FontWeight.w500),
                   ),
                   Text(" Completion", style: TextStyle(color: Colors.grey))
                 ],
@@ -232,31 +206,65 @@ class _CheckOutScreenState extends State<CheckOutScreen>
                 height: 10,
               ),
               serviceInfoCard(
-                estimatedHours: 5,
-                username: "Febiri Mark",
+                workerName: "Boadi Consult",
+                paymentStatus: "Paid",
+                jobStatus: "Pending",
                 location: "Tafo Mile 4 - Kumasi",
                 requestedJob: "Plumbing Service",
               ),
               const SizedBox(height: 10),
-              paymentInfoCard(
-                jobRequestCharge: 10,
-                serviceRequestCharge: 0,
-              ),
+              Container(
+                  width: 400,
+                  height: 150,
+                  padding: EdgeInsets.all(10),
+                  margin: EdgeInsets.only(bottom: 5, top: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[50],
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black87.withOpacity(0.1),
+                        spreadRadius: 1,
+                        blurRadius: 1,
+                        offset: Offset(1, 1), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Leave a Review",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w500)),
+                      Divider(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        maxLength: 50,
+                      )
+                    ],
+                  )),
               const SizedBox(
-                height: 15,
+                height: 10,
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "By clicking make payment, you agree to TUMA’s Terms of use and privacy policy",
-                    style: TextStyle(color: Colors.grey),
+                  Text("Review",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+                  SizedBox(height: 15),
+                  Row(children: [
+                    CircleAvatar(
+                        backgroundImage: AssetImage("assets/images/logo.jpg"))
+                  ]),
+                  completedButton,
+                  const SizedBox(
+                    height: 20,
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  payButton
                 ],
               ),
             ],
@@ -265,156 +273,21 @@ class _CheckOutScreenState extends State<CheckOutScreen>
       ),
     );
   }
-
-  void makePayment(BuildContext context) async {
-    Flutterwave flutterwave = Flutterwave.forUIPayment(
-      context: this.context,
-      encryptionKey: "FLWSECK_TESTd463bf7bc2c4",
-      publicKey: "FLWPUBK_TEST-ed59565b4bfa790d162becf27ea7c1d4-X",
-      currency: currency,
-      amount: amount,
-      email: "febiri@email.com",
-      fullName: "Febiri Mark",
-      txRef: _ref!,
-      isDebugMode: true,
-      phoneNumber: "0553164027",
-      acceptCardPayment: false,
-      acceptUSSDPayment: false,
-      acceptAccountPayment: false,
-      acceptFrancophoneMobileMoney: false,
-      acceptGhanaPayment: true,
-    );
-
-    try {
-      final ChargeResponse response =
-          await flutterwave.initializeForUiPayments();
-      if (response == null) {
-        // user didn't complete the transaction.
-      } else {
-        final isSuccessful = checkPaymentIsSuccessful(response);
-        if (isSuccessful) {
-          // provide value to customer
-          showDoneDialog();
-        } else {
-          // check message
-          print(response.message);
-
-          // check status
-          print(response.status);
-
-          // check processor error
-          print(response.data!.processorResponse);
-        }
-      }
-    } catch (error, stacktrace) {
-      // handleError(error);
-    }
-  }
-
-  bool checkPaymentIsSuccessful(final ChargeResponse response) {
-    return response.data!.status == FlutterwaveConstants.SUCCESSFUL &&
-        response.data!.currency == this.currency &&
-        response.data!.amount == this.amount &&
-        response.data!.txRef == _ref;
-  }
-}
-// Paystack Key
-// sk_test_63ef2bcbc3f29fb4556bd02f2f6cf0100bf46926
-
-class paymentInfoCard extends StatelessWidget {
-  int jobRequestCharge;
-  double serviceRequestCharge;
-
-  paymentInfoCard(
-      {Key? key,
-      required this.jobRequestCharge,
-      required this.serviceRequestCharge})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        width: 400,
-        height: 150,
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.only(bottom: 5, top: 5),
-        decoration: BoxDecoration(
-          color: Colors.grey[50],
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black87.withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 1,
-              offset: Offset(1, 1), // changes position of shadow
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Payment Information",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-            Divider(),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Job Request Charge : "),
-                SizedBox(width: 40),
-                Text('$jobRequestCharge')
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Service Charge : "),
-                SizedBox(width: 30),
-                Text('${jobRequestCharge * 10 / 100}')
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Total Charge : ",
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-                SizedBox(width: 30),
-                Text(_totalCharge(jobRequestCharge, serviceRequestCharge),
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500))
-              ],
-            ),
-          ],
-        ));
-  }
-
-  _totalCharge(int jobCharge, double serviceCharge) {
-    serviceRequestCharge = jobRequestCharge * 10 / 100;
-    double totalcharge = jobCharge + serviceRequestCharge;
-    return totalcharge.toString();
-  }
 }
 
 class serviceInfoCard extends StatelessWidget {
-  String username;
+  String workerName;
   String location;
   String requestedJob;
-  int estimatedHours;
+  String jobStatus;
+  String paymentStatus;
 
   serviceInfoCard({
-    required this.username,
+    required this.workerName,
     required this.location,
     required this.requestedJob,
-    required this.estimatedHours,
+    required this.jobStatus,
+    required this.paymentStatus,
     Key? key,
   }) : super(key: key);
 
@@ -441,7 +314,7 @@ class serviceInfoCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Service Information",
+            Text("Service Status",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
             Divider(),
             SizedBox(
@@ -450,9 +323,9 @@ class serviceInfoCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Client Name : "),
+                Text("Service Worker : "),
                 SizedBox(width: 40),
-                Text(username)
+                Text(workerName)
               ],
             ),
             SizedBox(
@@ -461,18 +334,7 @@ class serviceInfoCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Client Location : "),
-                SizedBox(width: 30),
-                Text(location)
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Service Request : "),
+                Text("Job Request : "),
                 SizedBox(width: 30),
                 Text(requestedJob)
               ],
@@ -481,10 +343,11 @@ class serviceInfoCard extends StatelessWidget {
               height: 10,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Estimated Hours : "),
-                SizedBox(width: 80),
-                Text('$estimatedHours Hours')
+                Text("Location : "),
+                SizedBox(width: 30),
+                Text(location)
               ],
             ),
             SizedBox(
@@ -492,9 +355,26 @@ class serviceInfoCard extends StatelessWidget {
             ),
             Row(
               children: [
-                Text("Payment Method : "),
-                SizedBox(width: 50),
-                Text("MTN MOBILE MONEY")
+                Text("Job Status : "),
+                SizedBox(width: 175),
+                Text(
+                  jobStatus,
+                  style: TextStyle(color: Colors.grey),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                Text("Payment Status : "),
+                SizedBox(width: 165),
+                Text(
+                  paymentStatus,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.green),
+                )
               ],
             ),
             SizedBox(
