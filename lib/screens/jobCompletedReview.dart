@@ -98,7 +98,7 @@ class _JobReviewScreenState extends State<JobReviewScreen>
       appBar: AppBar(
         backgroundColor: Colors.orangeAccent,
         elevation: 0,
-        title: const Text("Confirm Job"),
+        title: const Text("Completed"),
         leading: Padding(
           padding: EdgeInsets.all(8.0),
           child: InkWell(
@@ -141,8 +141,10 @@ class _JobReviewScreenState extends State<JobReviewScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   Text("Job Completed Successfully",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 18)),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 18,
+                          color: Colors.green)),
                 ],
               ),
               const SizedBox(
@@ -171,7 +173,7 @@ class _JobReviewScreenState extends State<JobReviewScreen>
                   ),
                   CircleAvatar(
                     radius: 25,
-                    backgroundColor: Colors.grey,
+                    backgroundColor: Colors.green,
                     child: Icon(
                       Icons.check,
                       color: Colors.white,
@@ -187,7 +189,7 @@ class _JobReviewScreenState extends State<JobReviewScreen>
                   Text("Make", style: TextStyle(fontWeight: FontWeight.w500)),
                   Text("Complete",
                       style: TextStyle(fontWeight: FontWeight.w500)),
-                  Text("Confirm", style: TextStyle(color: Colors.grey))
+                  Text("Confirm", style: TextStyle(fontWeight: FontWeight.w500))
                 ],
               ),
               Row(
@@ -199,7 +201,8 @@ class _JobReviewScreenState extends State<JobReviewScreen>
                     "Service Payment",
                     style: TextStyle(fontWeight: FontWeight.w500),
                   ),
-                  Text(" Completion", style: TextStyle(color: Colors.grey))
+                  Text(" Completion",
+                      style: TextStyle(fontWeight: FontWeight.w500))
                 ],
               ),
               const SizedBox(
@@ -208,7 +211,7 @@ class _JobReviewScreenState extends State<JobReviewScreen>
               serviceInfoCard(
                 workerName: "Boadi Consult",
                 paymentStatus: "Paid",
-                jobStatus: "Pending",
+                jobStatus: "Completed",
                 location: "Tafo Mile 4 - Kumasi",
                 requestedJob: "Plumbing Service",
               ),
@@ -259,8 +262,17 @@ class _JobReviewScreenState extends State<JobReviewScreen>
                   SizedBox(height: 15),
                   Row(children: [
                     CircleAvatar(
-                        backgroundImage: AssetImage("assets/images/logo.jpg"))
+                        radius: 30,
+                        backgroundImage: AssetImage("assets/images/logo.jpg")),
+                    SizedBox(width: 20),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text("Very professional workdone."),
+                      ],
+                    )
                   ]),
+                  SizedBox(height: 15),
                   completedButton,
                   const SizedBox(
                     height: 20,
@@ -356,24 +368,25 @@ class serviceInfoCard extends StatelessWidget {
             Row(
               children: [
                 Text("Job Status : "),
-                SizedBox(width: 175),
+                SizedBox(width: 155),
                 Text(
                   jobStatus,
-                  style: TextStyle(color: Colors.grey),
+                  style: const TextStyle(
+                      color: Colors.green, fontWeight: FontWeight.w600),
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Row(
               children: [
-                Text("Payment Status : "),
+                const Text("Payment Status : "),
                 SizedBox(width: 165),
                 Text(
                   paymentStatus,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.green),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, color: Colors.green),
                 )
               ],
             ),
