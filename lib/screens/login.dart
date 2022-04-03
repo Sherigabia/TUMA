@@ -15,6 +15,8 @@ import 'package:tuma/models/user.dart';
 import 'package:tuma/screens/forgotPassword.dart';
 import 'package:tuma/screens/registration.dart';
 
+late User user;
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -83,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
   //   }
   //   return true;
   // }
-  late User user;
+  // late User user;
   // end of the code
   bool processing = false;
 
@@ -189,16 +191,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       SizedBox(
-                          height: 230,
-                          child: Image.asset(
-                            'assets/images/Tuma.jpg',
-                            fit: BoxFit.contain,
-                          )),
-                      const SizedBox(height: 5),
+                        height: 30,
+                      ),
+                      Center(
+                        child: SizedBox(
+                            child: Image.asset(
+                          'assets/images/TumaLogo.png',
+                          fit: BoxFit.contain,
+                        )),
+                      ),
+                      const SizedBox(height: 25),
                       emailField,
                       const SizedBox(height: 25),
                       passwordField,
-                      const SizedBox(height: 35),
+                      const SizedBox(height: 25),
                       loginButton,
                       const SizedBox(height: 15),
                       Row(
@@ -260,8 +266,8 @@ class _LoginScreenState extends State<LoginScreen> {
         processing = true;
       });
       //  var url = Uri.parse('https://tuma.com/tg/api/user/login');
-      var url = Uri.parse(
-          'http://3bcc-154-160-2-31.ngrok.io/Tuma/api/user/login'); // global URL
+      var url =
+          Uri.parse('https://tumaghana.com/Tuma/api/user/login'); // global URL
 
       var data = {
         'email': emailController.text,

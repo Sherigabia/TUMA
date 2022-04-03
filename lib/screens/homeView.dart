@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tuma/screens/job.dart';
+import 'package:tuma/screens/login.dart';
 import 'package:tuma/screens/workPage.dart';
 import 'package:tuma/widgets/categoriesList.dart';
 import 'package:tuma/widgets/creditCard.dart';
@@ -15,15 +16,18 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   bool isDarkModeEnabled = false;
   final workers = [
+    {'jobTitle': 'Graphic Design', 'img': "assets/images/graphicDesign.jpeg"},
+    {"jobTitle": 'Photography', 'img': "assets/images/photographer.jpg"},
     {'jobTitle': 'Catering', 'img': "assets/images/catering.jpeg"},
-    {'jobTitle': 'Delivery', 'img': "assets/images/delivery.jpeg"},
     {'jobTitle': 'Plumbing', 'img': "assets/images/plumber4.jpg"},
-    {"jobTitle": 'Photography', 'img': "assets/images/photographer.jpeg"},
+    {'jobTitle': 'Delivery', 'img': "assets/images/delivery.jpeg"},
     {'jobTitle': 'Beautician', 'img': "assets/images/beautician.jpeg"},
   ];
 
   @override
   Widget build(BuildContext context) {
+    final name = "${user.lastname} ${user.firstname}";
+    final email = '${user.email}';
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(),
@@ -37,8 +41,9 @@ class _HomeViewState extends State<HomeView> {
           backgroundColor: Colors.grey[50],
           drawer: SideNavigation(
             imgUrl: "assets/images/delivery.jpeg",
-            username: "Pambo",
-            requestCount: 2,
+            username: name,
+            email: email,
+            requestCount: 0,
           ),
           appBar: AppBar(
             backgroundColor: Colors.grey[50],
@@ -153,12 +158,14 @@ class _HomeViewState extends State<HomeView> {
 class SideNavigation extends StatelessWidget {
   String imgUrl;
   String username;
+  String email;
   int requestCount;
 
   SideNavigation(
       {Key? key,
       required this.imgUrl,
       required this.username,
+      required this.email,
       required this.requestCount})
       : super(key: key);
 
@@ -171,7 +178,7 @@ class SideNavigation extends StatelessWidget {
               margin: const EdgeInsets.all(0),
               padding: const EdgeInsets.all(0),
               child: Container(
-                height: 500,
+                height: 600,
                 padding: const EdgeInsets.all(30),
                 decoration: const BoxDecoration(
                     image: DecorationImage(
@@ -179,16 +186,29 @@ class SideNavigation extends StatelessWidget {
                         fit: BoxFit.cover)),
                 child: Column(children: [
                   Container(
-                      height: 80,
-                      width: 80,
+                      height: 60,
+                      width: 60,
                       child: CircleAvatar(backgroundImage: AssetImage(imgUrl))),
                   Container(
                     padding: const EdgeInsets.only(top: 5),
-                    child: Text(
-                      username,
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
+                    child: Column(
+                      children: [
+                        Text(
+                          username,
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          email,
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        )
+                      ],
                     ),
                   )
                 ]),

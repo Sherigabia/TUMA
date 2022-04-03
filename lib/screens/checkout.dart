@@ -100,7 +100,9 @@ class _CheckOutScreenState extends State<CheckOutScreen>
         borderRadius: BorderRadius.circular(5),
         child: MaterialButton(
             onPressed: () {
-    
+              makePayment(context);
+
+              //  makePayment(context);
             },
             padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
             minWidth: MediaQuery.of(context).size.width,
@@ -261,7 +263,6 @@ class _CheckOutScreenState extends State<CheckOutScreen>
     );
   }
 
-
   void makePayment(BuildContext context) async {
     Flutterwave flutterwave = Flutterwave.forUIPayment(
       context: this.context,
@@ -272,10 +273,10 @@ class _CheckOutScreenState extends State<CheckOutScreen>
       email: "febiri@email.com",
       fullName: "Febiri Mark",
       txRef: _ref!,
-      isDebugMode: true,
+      isDebugMode: false,
       phoneNumber: "0553164027",
       acceptCardPayment: false,
-      acceptUSSDPayment: false,
+      acceptUSSDPayment: true,
       acceptAccountPayment: false,
       acceptFrancophoneMobileMoney: false,
       acceptGhanaPayment: true,
@@ -291,10 +292,6 @@ class _CheckOutScreenState extends State<CheckOutScreen>
         if (isSuccessful) {
           // provide value to customer
           showDoneDialog();
-          Timer(
-              Duration(seconds: 4),
-              () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => JobCompletedScreen())));
         } else {
           // check message
           print(response.message);
@@ -396,12 +393,6 @@ class paymentInfoCard extends StatelessWidget {
           ],
         ));
   }
-
-
-
-
-
-  
 
   _totalCharge(int jobCharge, double serviceCharge) {
     serviceRequestCharge = jobRequestCharge * 10 / 100;

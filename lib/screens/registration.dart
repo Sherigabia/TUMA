@@ -1,8 +1,11 @@
-import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_cropper/image_cropper.dart';
 import 'package:tuma/screens/login.dart';
+import 'package:image_picker/image_picker.dart' as imp;
 import 'package:date_time_picker/date_time_picker.dart';
 //import 'package:tuma/screens/mainPage.dart';
 //import 'package:tuma/api/api.dart';
@@ -17,41 +20,64 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
   bool processing = false;
 
-  //auth
-  // final _auth = FirebaseAuth.instance;
   // form key
   final _formKey = GlobalKey<FormState>();
+  final imp.ImagePicker _imagePicker = imp.ImagePicker();
 
   //editing controllers
-
   final firstNameEditingController = TextEditingController();
   final lastNameEditingController = TextEditingController();
-  final dateOfBirthEditingController = TextEditingController();
+  final dateOfBirthEditingController =
+      TextEditingController(text: DateTime.now().toString());
   final phoneNumberEditingController = TextEditingController();
   final momoNumberEditingController = TextEditingController();
   final emailEditingController = TextEditingController();
   final passwordEditingController = TextEditingController();
   final confirmPasswordEditingController = TextEditingController();
 
+// Functions
+  Future<File?> cropImage({required File imageFile}) async {
+    ImageCropper cropper = ImageCropper();
+    return await cropper.cropImage(
+        sourcePath: imageFile.path,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio16x9
+        ],
+        androidUiSettings: const AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        iosUiSettings: const IOSUiSettings(
+            minimumAspectRatio: 1.0, title: 'Image Cropper'));
+  }
+
+//Register User
   _registerUser() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         processing = true;
       });
 
-      var url =
-          Uri.parse('http://3bcc-154-160-2-31.ngrok.io/Tuma/api/user/register');
+      var url = Uri.parse('https://tumaghana.com/Tuma/api/user/register');
 
       var data = {
         "firstname": firstNameEditingController.text,
         "lastname": lastNameEditingController.text,
-        "dob": dateOfBirthEditingController.text,
         "phone_number": phoneNumberEditingController.text,
-        "momo_number": momoNumberEditingController.text,
         "email": emailEditingController.text,
+        "dob": dateOfBirthEditingController.text,
+        "momo_number": momoNumberEditingController.text,
         "password": passwordEditingController.text,
       };
+      print(data);
       var response = await http.post(url, body: data);
+      print(response.body);
       if (response.statusCode == 200) {
         setState(() {
           processing = false;
@@ -204,11 +230,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         dateHintText: "Select Date of Birth",
         dateMask: 'd MMM, yyyy',
         // initialValue: DateTime.now().toString(),
-        firstDate: DateTime(2000),
+        firstDate: DateTime(1970),
         lastDate: DateTime(2100),
         icon: Icon(Icons.event),
         dateLabelText: 'Date',
-        onChanged: (value) => print(value),
         validator: (value) {
           if (value!.isEmpty) {
             return "Date Of Birth is required !";
@@ -272,6 +297,71 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             hintText: "Confirm Password",
             border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(10))));
+// Select Image
+    final selectImageField = TextButton(
+        onPressed: () {
+          showModalBottomSheet(
+              context: context,
+              shape: const RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(15))),
+              builder: (context) {
+                return SizedBox(
+                  height: 150,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 20),
+                      TextButton.icon(
+                          onPressed: () async {
+                            final imp.XFile? xfile = await _imagePicker
+                                .pickImage(source: imp.ImageSource.camera);
+                            if (xfile != null) {
+                              File? myCroppedFile =
+                                  await cropImage(imageFile: File(xfile.path));
+
+                              // await submitPost(myCroppedFile!, context);
+                              Navigator.pop(context);
+                              //show progress dialog
+                              // await ProgressLoader().show(context);
+                            }
+                          },
+                          icon: const Icon(CupertinoIcons.camera,
+                              color: Colors.black),
+                          label: const Text('Take a Picture',
+                              style: TextStyle(color: Colors.black))),
+                      const Divider(),
+                      TextButton.icon(
+                          onPressed: () async {
+                            final imp.XFile? xfile = await _imagePicker
+                                .pickImage(source: imp.ImageSource.gallery);
+
+                            if (xfile != null) {
+                              File? myCroppedFile =
+                                  await cropImage(imageFile: File(xfile.path));
+
+                              // await submitPost(myCroppedFile!, context);
+                              Navigator.pop(context);
+                            }
+                          },
+                          icon: const Icon(
+                              CupertinoIcons.photo_fill_on_rectangle_fill,
+                              color: Colors.black),
+                          label: const Text(
+                            'Select from Gallery',
+                            style: TextStyle(color: Colors.black),
+                          ))
+                    ],
+                  ),
+                );
+              });
+        },
+        child: Row(children: [
+          Icon(CupertinoIcons.camera, color: Colors.grey),
+          SizedBox(
+            width: 10,
+          ),
+          Text("Choose a profile picture", style: TextStyle(color: Colors.grey))
+        ]));
 
     // Register Button
 
@@ -301,6 +391,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        title: Text(
+          "Create Account",
+          style: TextStyle(color: Colors.black),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
@@ -309,7 +403,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             },
             icon: Icon(
               Icons.arrow_back,
-              color: Colors.red,
+              color: Colors.black,
             )),
       ),
       body: Center(
@@ -317,7 +411,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           child: Container(
               color: Colors.white,
               child: Padding(
-                padding: const EdgeInsets.all(36.0),
+                padding: const EdgeInsets.only(left: 36.0, right: 36.0),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -325,15 +419,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       SizedBox(
-                          height: 200,
+                          height: 80,
                           child: Image.asset(
-                            'assets/images/Tuma.jpg',
+                            'assets/images/TumaLogo.png',
                             fit: BoxFit.contain,
                           )),
                       SizedBox(height: 5),
                       firstNameField,
                       SizedBox(height: 20),
                       lastNameField,
+                      // SizedBox(height: 20),
+                      // selectImageField,
                       SizedBox(height: 20),
                       dateOfBirth,
                       SizedBox(height: 20),

@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _navigateHome() {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const HomeView()));
+        MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
   @override

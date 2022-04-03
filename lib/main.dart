@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     // ThemeData(scaffoldBackgroundColor: Colors.white);
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'TUMA',
+      title: 'Tuma',
       home: SplashScreen(),
     );
   }
