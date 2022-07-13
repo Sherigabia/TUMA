@@ -51,3 +51,13 @@ final workerInfo = [
     "img": "assets/images/plumber4.jpg"
   },
 ];
+
+final graphicWorkers = [
+  {
+    "workername": "Cobby Agency",
+    "description":
+        "For all your graphic design needs, Cobby Advertising Agency has got you covered",
+    "location": "Sunyani - Methodist building",
+    "img": "assets/Cobby_Advertising/main.jpg"
+  },
+];

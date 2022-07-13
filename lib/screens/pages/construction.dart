@@ -4,17 +4,16 @@ import 'package:tuma/screens/workerDetail.dart';
 import 'package:tuma/widgets/cardWidget.dart';
 import 'package:tuma/widgets/workerInfoCard.dart';
 
-class WorkPage extends StatefulWidget {
-  String jobTitle;
-  String jobImgUrl;
-  WorkPage({Key? key, required this.jobTitle, required this.jobImgUrl})
-      : super(key: key);
+class ConstructionScreen extends StatefulWidget {
+  ConstructionScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  _WorkPageState createState() => _WorkPageState();
+  _ConstructionScreenState createState() => _ConstructionScreenState();
 }
 
-class _WorkPageState extends State<WorkPage> {
+class _ConstructionScreenState extends State<ConstructionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +76,7 @@ class _WorkPageState extends State<WorkPage> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    "${widget.jobTitle}",
+                                    "Construction",
                                     style: const TextStyle(
                                         fontSize: 41,
                                         letterSpacing: 2,
@@ -98,7 +97,7 @@ class _WorkPageState extends State<WorkPage> {
                                     height: 5,
                                   ),
                                   Text(
-                                    '${widget.jobTitle} proffesionals ',
+                                    'Construction profesionals ',
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.normal,
@@ -147,7 +146,7 @@ class _WorkPageState extends State<WorkPage> {
                   ),
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage("${widget.jobImgUrl}"),
+                          image: AssetImage("assets/images/construction.jpg"),
                           colorFilter: ColorFilter.mode(
                               Colors.black.withOpacity(0.6), BlendMode.darken),
                           fit: BoxFit.cover)),
@@ -160,7 +159,7 @@ class _WorkPageState extends State<WorkPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16.0, 8, 0, 0),
-                  child: Text("${widget.jobTitle} Professionals",
+                  child: Text("Construction Professionals",
                       style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                 ),
@@ -196,14 +195,4 @@ class _WorkPageState extends State<WorkPage> {
       ),
     );
   }
-
-  // Widget WorkerCardWidget() => SliverList(
-  //         delegate: SliverChildListDelegate([
-  //       Text("Hello"),
-  //       WorkerInfoCard(
-  //           name: name,
-  //           imgUrl: imgUrl,
-  //           location: location,
-  //           description: description)
-  //     ]));
 }

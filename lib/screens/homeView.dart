@@ -16,6 +16,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   bool isDarkModeEnabled = false;
   final workers = [
+    {'jobTitle': 'Construction', 'img': "assets/images/construction.jpg"},
     {'jobTitle': 'Graphic Design', 'img': "assets/images/graphicDesign.jpeg"},
     {"jobTitle": 'Photography', 'img': "assets/images/photographer.jpg"},
     {'jobTitle': 'Catering', 'img': "assets/images/catering.jpeg"},

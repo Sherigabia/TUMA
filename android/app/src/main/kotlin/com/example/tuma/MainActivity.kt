@@ -1,4 +1,4 @@
-package com.example.tuma
+package com.tumaghapp.tumaghana
 
 import io.flutter.embedding.android.FlutterActivity
 
